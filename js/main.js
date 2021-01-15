@@ -1,131 +1,86 @@
+function makeGETRequest(url) {
+  return new Promise((resolve, reject) => {
+    var xhr;
+
+    if (window.XMLHttpRequest) {
+      xhr = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+      xhr = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status == 200) {
+          resolve(xhr.responseText);
+        } else {
+          reject(console.log('Error:' + xhr.status));
+        }
+      }
+    }
+    xhr.open('GET', url, true);
+    xhr.send();
+  })
+}
+
+const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+
+
 class GoodsItem {
   constructor(title, price) {
-    this.title = title;
+    this.product_name = title;
     this.price = price;
   }
   render() {
-    return `<div class="goods-item"><h3>${this.title}</h3><p>${this.price}</p></div>`;
+    return `<div class="goods-item"><h3>${this.product_name}</h3><p>${this.price}</p></div>`;
   }
 }
+
 
 class GoodsList {
   constructor() {
     this.goods = [];
   }
   fetchGoods() {
-    this.goods = [
-      { title: 'Shirt', price: 150 },
-      { title: 'Socks', price: 50 },
-      { title: 'Jacket', price: 350 },
-      { title: 'Shoes', price: 250 },
-    ];
+    return new Promise((resolve, reject) => {
+      makeGETRequest(`${API_URL}/catalogData.json`)
+        .then((goods) => {
+          this.goods = JSON.parse(goods);
+          resolve();
+        })
+    })
   }
+
   render() {
     let listHtml = '';
     this.goods.forEach(good => {
-      const goodItem = new GoodsItem(good.title, good.price);
+      const goodItem = new GoodsItem(good.product_name, good.price);
       listHtml += goodItem.render();
     });
     document.querySelector('.goods-list').innerHTML = listHtml;
   }
-  sum() {
-    let sumGoods = 0;
-    this.goods.forEach(good => {
-      sumGoods += good.price;
-    });
-    return sumGoods;
+
+  getBasket() {
+    return new Promise((resolve, reject) => {
+      makeGETRequest(`${API_URL}/getBasket.json`)
+        .then((goods) => {
+          this.goods = JSON.parse(goods);
+          // console.log(goods);
+          resolve();
+        })
+    })
   }
+
 }
 
-class Basket extends GoodsList {
-  constructor() {
-    super();
-  }
-}
 
-class BasketItem extends GoodsItem {
-  constructor(title, price, count = 1) {
-    super(title, price);
-    this.count = count;
-  }
-}
 
 const list = new GoodsList();
-list.fetchGoods();
-list.render();
-//console.log(list.sum());
-
-
-// ===============================
-class Hamburger {
-  constructor(size, stuffing, topping = 0) {
-    this.size = size;
-    this.stuffing = stuffing;
-    this.topping = topping;
-  }
-  calculatePrice() {      // Узнать цену 
-    let price = 0;
-    (this.size == 1) ? price += 50 : price += 100;
-      switch (this.stuffing) {
-        case "stuff_1":
-          price += 10;
-          break;
-        case "stuff_2":
-          price += 20;
-          break;
-        case "stuff_3":
-          price += 15;
-          break;
-      }
-      if (this.topping !== 0) {
-        this.topping.forEach(item => {
-          if (item == 'topp_1') price+=15;
-          if (item == 'topp_2') price+=20;
-        })
-      
-      }
-      return price;
-  }      
-   calculateCalories() {   // Узнать калорийность }
-   let calories = 0;
-    (this.size == 1) ? calories += 20 : calories += 40;
-      switch (this.stuffing) {
-        case "stuff_1":
-          calories += 20;
-          break;
-        case "stuff_2":
-          calories += 5;
-          break;
-        case "stuff_3":
-          calories += 10;
-          break;
-      }
-      if (this.topping !== 0) {
-        this.topping.forEach(item => {
-          if (item == 'topp_2') calories+=5;
-        })
-      
-      }
-      return calories;
-    }
-}
-
-//получение данных из формы
-document.querySelector('.menu-btn').onclick = () => {
-  let size = document.forms["hamburger"].elements['menu-type'].value,
-    stuff = document.forms["hamburger"].elements['menu-stuff'].value,
-    extra = document.forms["hamburger"].elements['menu-extra'],
-    topping = [];
-  extra.forEach((item) => {
-    if (item.checked)
-      topping.push(item.value);
+list.fetchGoods()
+  .then(() => {
+    list.render();
+  })
+  .catch((error) => {
+    console.log(error);
   });
 
-  const hamb = new Hamburger(size, stuff, topping);
-  
-  //вывод
-  alert("Цена: " + hamb.calculatePrice() + " рублей "+ "\nКалорийность: "+ hamb.calculateCalories() + " ккал");
-
-  //очистить форму
-  document.getElementById('hamburger').reset();
-}
+// list.getBasket();
