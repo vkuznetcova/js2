@@ -59,22 +59,31 @@ class GoodsList {
     document.querySelector('.goods-list').innerHTML = listHtml;
   }
 
-  getBasket() {
+  getBasket() { // получение списка товаров в корзине
     return new Promise((resolve, reject) => {
       makeGETRequest(`${API_URL}/getBasket.json`)
         .then((goods) => {
           this.goods = JSON.parse(goods);
-          // console.log(goods);
+          console.log(goods);
           resolve();
         })
     })
   }
 
+  addItemToBasket(item) { // добавление товара в корзину
+    const itemBasket = new GoodsItem(item.product_name, item.price);
+    this.goods.push(itemBasket);
+  }
+
+  deleteItemFromBasket(item) { // удаление товара из корзины
+    this.goods.splice(item, 1);
+  }
+
 }
 
 
-
-const list = new GoodsList();
+const list = new GoodsList(),
+  basketList = new GoodsList();
 list.fetchGoods()
   .then(() => {
     list.render();
@@ -82,5 +91,3 @@ list.fetchGoods()
   .catch((error) => {
     console.log(error);
   });
-
-// list.getBasket();
