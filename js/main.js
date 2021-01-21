@@ -1,4 +1,6 @@
 // 1 - 2 задание
-let reg1 = /^\'|\'$/gm;
-//let txt =`'О чём ты думаешь? — спросила Ир'а. — Мож'ет, о будущем?'`
-console.log(txt.replace(reg1,'"'));
+let reg1 = /\B'|'\B/gm;
+//console.log(str.replace(reg1,'"'));
+
+
+
