@@ -1,0 +1,54 @@
+html,body {
+  margin: 0;
+  padding: 0;
+}
+main {
+  width: 1280px;
+  margin: 0 auto;
+}
+header {
+  width: 1280px;
+  height: 100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  box-sizing: border-box;
+  border-bottom: 1px solid #000;
+}
+.goods-list {
+  width: 1280px;
+  padding: 15px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+}
+.goods-item {
+  width: 150px;
+  height: 150px;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 100px;
+}
+.goods-item h3{
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  box-sizing: border-box;
+  border-bottom: 1px solid #000;
+  border-top: 1px solid #000;
+}
+.goods-item p {
+  margin: 0;
+  padding: 0;
+}
+.goods-err {
+  width: 100%;
+  display: block;
+  text-align: center; 
+  padding-top: 35px;
+}
