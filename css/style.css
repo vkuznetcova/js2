@@ -29,9 +29,8 @@ header {
   display: flex;
   justify-content: space-around;
 }
-.goods-item {
+.goods-item div{
   width: 150px;
-  height: 150px;
   box-sizing: border-box;
   border: 1px solid #000;
   display: flex;
@@ -50,11 +49,25 @@ header {
 }
 .goods-item p {
   margin: 0;
-  padding: 0;
+  padding: 10px 0 0;
+}
+.goods-item button{
+  display: block;
+  width: 80%;
+  margin: 10px;
 }
 .goods-err {
   width: 100%;
   display: block;
   text-align: center; 
   padding-top: 35px;
+}
+.basket {
+  padding: 5px;
+  text-align: center;
+}
+.basket-item {
+  border: 1px solid #000;
+  padding-bottom: 10px;
+  margin: 10px;
 }
