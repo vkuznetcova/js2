@@ -12,18 +12,22 @@
   <div id="app">
     <header>
       <form action="#">
+        <label> Поиск товара:
       <input type="text" class="goods-search" v-model="searchLine">
-      <button class="search-button" type="submit" @click.prevent="filterGoods()">Искать</button>
+    </label>
     </form>
-      <button class="cart-button" type="button">Корзина</button>
+      <button class="cart-button" type="button" @click="isVisibleBasket = !isVisibleBasket">Корзина</button>
     </header>
     <main>
-      <span class="goods-err"></span>
       <div class="goods-list">
         <div class="goods-item" v-for="good in filteredGoods">
           <h3>{{ good.product_name }}</h3>
           <p>{{ good.price }}</p>
       </div>
+    </div>
+    <div v-if="isVisibleBasket" class="basket">
+      <h2>Ваша корзина</h2>
+    </div>
     </main>
   </div>
 

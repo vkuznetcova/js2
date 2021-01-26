@@ -4,10 +4,14 @@ const app = new Vue({
   el: '#app',
   data: {
     goods: [],
-    filteredGoods: [],
     searchLine: '',
-    errLine: 'Нет данных',
-    isVisibleCart: true
+    isVisibleBasket: false
+  },
+  mounted() {
+    this.makeGETRequest(`${API_URL}/catalogData.json`)
+      .then(goods => {
+        this.goods = JSON.parse(goods);
+      });
   },
   methods: {
     makeGETRequest(url) {
@@ -31,27 +35,15 @@ const app = new Vue({
         xhr.send();
       })
     },
-
-    filterGoods() {
-      let search = this.searchLine.toLowerCase().trim();
-      if (search === '') {
-        document.querySelector('.goods-err').innerHTML = 'Нет данных';
-        this.filteredGoods = this.goods;
-      } else {
-        document.querySelector('.goods-err').innerHTML = '';
-        this.filteredGoods = this.goods.filter((good) => {
-          return good.product_name.toLowerCase().includes(search);
-        });
-      }
+    visibleBasket(){
+      isVisibleBasket = true
     }
-
   },
-  mounted() {
-    this.makeGETRequest(`${API_URL}/catalogData.json`)
-      .then(goods => {
-        this.goods = JSON.parse(goods);
-        this.filteredGoods = JSON.parse(goods);
-      });
+  computed: {
+    filteredGoods() {
+      const search = new RegExp(this.searchLine, 'i');
+      return this.filteredGoods=this.goods.filter((good) => good.product_name.match(search));
+    }
   }
 
 });
